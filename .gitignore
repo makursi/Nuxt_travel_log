@@ -4,6 +4,8 @@
 .nuxt
 .nitro
 .cache
+.vscode
+.husky
 dist
 
 # Node dependencies
