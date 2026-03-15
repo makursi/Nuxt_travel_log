@@ -6,6 +6,8 @@ const EnvSchema = z.object({
   DB_FILE_NAME: z.string(),
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.string(),
+  GITHUB_CLIENT_ID: z.string(),
+  GITHUB_CLIENT_SECRET: z.string(),
 });
 
 // 导出推断出的静态类型
