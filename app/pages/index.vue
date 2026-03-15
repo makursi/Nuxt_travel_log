@@ -10,9 +10,7 @@
         <p class="py-6">
           Use this travel log app to keep track of your travel itinerary.
         </p>
-        <button class="btn btn-accent">
-          Sign In With GitHub<Icon name="tabler:brand-github" size="24" />
-        </button>
+        <AuthButton />
       </div>
     </div>
   </div>

@@ -40,5 +40,5 @@ export const location = sqliteTable(
   // 普通的 .unique() 是单列的（比如 slug 不能重复）。
   // 而这里的逻辑是：“对于同一个用户 (userId)，地点名称 (name) 不能重复。”
   // 业务逻辑需求：在一个用户的旅行日志里，他可能不想重复记录同一个地方两次（避免数据冗余）。
-  (t) => [unique().on(t.name, t.userId)],
+  t => [unique().on(t.name, t.userId)],
 );
