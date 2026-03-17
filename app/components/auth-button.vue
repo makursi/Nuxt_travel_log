@@ -27,25 +27,21 @@ const authStore = useAuthStore();
       </li>
     </ul>
   </div>
-  <div>
-    <button
-      :disabled="authStore.loading"
-      class="btn"
-      @click="authStore.signIn"
-    >
-      Sign In With GitHub
+  <button
+    v-else
+    :disabled="authStore.loading"
+    class="btn"
+    @click="authStore.signIn"
+  >
+    Sign In With GitHub
 
-      <span
-        v-if="authStore.loading"
-        class="loading loading-spinner loading-lg"
-      />
-      <Icon
-        v-else
-        name="tabler:brand-github"
-        size="24"
-      />
-    </button>
-  </div>
+    <span v-if="authStore.loading" class="loading loading-spinner loading-lg" />
+    <Icon
+      v-else
+      name="tabler:brand-github"
+      size="24"
+    />
+  </button>
 </template>
 
 <style lang="scss" scoped></style>

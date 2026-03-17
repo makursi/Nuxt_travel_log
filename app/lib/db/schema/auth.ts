@@ -28,7 +28,7 @@ export const session = sqliteTable(
   "session",
   {
     id: int().primaryKey({ autoIncrement: true }),
-    expires_at: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
+    expiresAt: integer("expires_at", { mode: "timestamp_ms" }).notNull(),
     token: text("token").notNull().unique(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .default(sql`(cast(unixepoch('subsecond') * 1000 as integer))`)
