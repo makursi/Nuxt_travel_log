@@ -9,13 +9,13 @@ export const locationLogImage = sqliteTable("locationLogImage", {
   locationLogId: int()
     .notNull()
     .references(() => locationLog.id, { onDelete: "cascade" }),
-  userId: int()
+  userId: int("user_id")
     .notNull()
     .references(() => user.id, { onDelete: "cascade" }),
-  createdAt: int()
+  createdAt: int("created_at")
     .notNull()
     .$default(() => Date.now()),
-  updatedAt: int()
+  updatedAt: int("updated_at")
     .notNull()
     .$default(() => Date.now())
     .$onUpdate(() => Date.now()),

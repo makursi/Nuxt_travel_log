@@ -52,6 +52,7 @@ function toggleSideBar() {
           :show-label="isSideBarOpen"
           label="Add Locations"
           icon="tabler:circle-plus-filled"
+          href="/dashboard/add"
         />
 
         <div class="divider" />
@@ -65,7 +66,7 @@ function toggleSideBar() {
     </div>
 
     <div class="flex-1 bg-amber-950-300">
-      我是傻逼
+      <NuxtPage />
     </div>
   </div>
 </template>

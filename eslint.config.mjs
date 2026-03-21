@@ -18,6 +18,7 @@ export default withNuxt(
     },
     {
       rules: {
+        // 对于vue 组件属性进行格式规范, 最多有三个属性在一行时, 就是包裹然后卷起下一行
         "vue/max-attributes-per-line": [
           "error",
           {
