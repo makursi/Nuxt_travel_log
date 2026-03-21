@@ -1,4 +1,5 @@
 import { int, real, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
+import { createInsertSchema } from "drizzle-orm/zod";
 import { user } from "./auth";
 
 export const location = sqliteTable(
@@ -10,7 +11,7 @@ export const location = sqliteTable(
     description: text(),
     lat: real().notNull(),
     long: real().notNull(),
-    userId: int()
+    userId: int("user_id")
       .notNull()
       //  references 是用来建立 外键约束 (Foreign Key Constraint) 的关键字。
       // 作用是“建立两个表之间的强关联，并保证数据的逻辑正确性”,无references时,会产生孤儿数据。
@@ -24,7 +25,7 @@ export const location = sqliteTable(
     // 按时间顺序展示旅行日志（“最新的旅行”）。
     // 统计用户是什么时候开始记录这个地点的。
 
-    createdAt: int()
+    createdAt: int("created_at")
       .notNull()
       .$default(() => new Date()),
     // (更新时间)
@@ -32,7 +33,7 @@ export const location = sqliteTable(
     // 用途：
     // 判断数据是否过时。
     // 实现“最后编辑于 5 分钟前”这样的提示。
-    updatedAt: int()
+    updatedAt: int("updated_at")
       .notNull()
       .$default(() => new Date()),
   },
@@ -42,3 +43,17 @@ export const location = sqliteTable(
   // 业务逻辑需求：在一个用户的旅行日志里，他可能不想重复记录同一个地方两次（避免数据冗余）。
   t => [unique().on(t.name, t.userId)],
 );
+
+// 定义插入的location schema
+export const InsertLocationSchema = createInsertSchema(location, {
+  name: field => field.min(1).max(100),
+  description: field => field.max(1000),
+  lat: field => field.min(-90).max(90),
+  long: field => field.min(-180).max(180),
+}).omit({
+  id: true,
+  userId: true,
+  slug: true,
+  createdAt: true,
+  updatedAt: true,
+});
