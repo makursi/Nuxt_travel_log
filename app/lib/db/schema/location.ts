@@ -7,7 +7,7 @@ export const location = sqliteTable(
   {
     id: int().primaryKey({ autoIncrement: true }),
     name: text().notNull(),
-    slug: text().notNull().unique(),
+    slug: text("slug").notNull().unique(),
     description: text(),
     lat: real().notNull(),
     long: real().notNull(),
