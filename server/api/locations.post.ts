@@ -1,14 +1,14 @@
-import { and, eq } from "drizzle-orm";
-// 导入nanoid
-import { customAlphabet } from "nanoid";
-// 导入slug
+import type { DrizzleError } from "drizzle-orm";
 
 import slugify from "slug";
 
-// 导入数据库实例
-import db from "~/lib/db/index";
-
-import { InsertLocationSchema, location } from "~/lib/db/schema";
+// 导入自定义的query 函数
+import {
+  findLocationByName,
+  findUniqueSlug,
+  insertLocation,
+} from "~/lib/db/queries/location";
+import { InsertLocation } from "~/lib/db/schema";
 
 //  导入数据库进行数据插入
 
@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
       }),
     );
   }
-  const result = await readValidatedBody(event, InsertLocationSchema.safeParse);
+  const result = await readValidatedBody(event, InsertLocation.safeParse);
 
   if (!result.success) {
     const statusMessage = result.error.issues
@@ -51,12 +51,10 @@ export default defineEventHandler(async (event) => {
   //  处理slug的生成, 使用slug库和 nanoid 生成对浏览器 url 友好的地址, 因为用户可能只分享同一个地点一次, 所以要行slug + id = idSlug的生成
   // 查询数据库, 检查slug 是否存在,如果存在就添加上nanoid 如果不存在 就单插入一个位置
 
-  const existinglocation = await db.query.location.findFrist({
-    where: and(
-      eq(location.name, result.data.name),
-      eq(location.userId, result.data.name),
-    ),
-  });
+  const existinglocation = await findLocationByName(
+    result.data,
+    event.context.user.id,
+  );
 
   if (existinglocation) {
     return sendError(
@@ -67,44 +65,21 @@ export default defineEventHandler(async (event) => {
       }),
     );
   }
-  let slug = slugify(result.data.name);
-  let existing = !!(await db.query.location.findFirst({
-    where: eq(location.slug, slug),
-  }));
-  // 无法使用findFirst方法
 
-  const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 5);
+  // 无法使用findFirst方法
+  const slug = await findUniqueSlug(slugify(result.data.name));
   // 防止数据库id发生冲突
-  while (existing) {
-    const id = nanoid();
-    const idSlug = `${slug}` + `-${id}`;
-    // 重新查询数据库
-    existing = !!(await db.query.location.findFirst({
-      where: eq(location.slug, slug),
-    }));
-    if (!existing) {
-      slug = idSlug;
-    }
-  }
+
   // 自定义错误处理信息
   // 数据库异步操作使用await
   // Drizzle 的返回格式: Drizzle 的 .all() 或隐式执行通常返回一个数组，即使只插入了一行数据，格式也是 [ { id: 1, name: 'Task' } ]。
   //  const [created] = await db 是数组结构, 取数组的第一个元素
   //  return created 将新数据对象返回给调用者
   try {
-    const [created] = await db
-      .insert(location)
-      .values({
-        ...result.data,
-        userId: event.context.user.id,
-        slug,
-      })
-      // 这告诉数据库在执行 INSERT 等执行数据库的操作后，返回新插入行的完整数据（而不仅仅是受影响的行数）。如果不加这个，通常只能拿到 { changes: 1 } 之类的信息。
-      .returning();
-    return created;
+    return insertLocation(result.data, slug, event.context.user.id);
   }
   catch (e) {
-    const error = e as any;
+    const error = e as DrizzleError;
     const errmsg = String(error.message || error);
 
     console.error("Database Error:", errmsg);

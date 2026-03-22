@@ -1,5 +1,9 @@
+import type { z } from "zod";
 import { int, real, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
-import { createInsertSchema } from "drizzle-orm/zod";
+
+// 用于插入操作的输入数据类型验证规则,createInsertSchema 函数
+import { createInsertSchema } from "drizzle-zod";
+
 import { user } from "./auth";
 
 export const location = sqliteTable(
@@ -44,12 +48,25 @@ export const location = sqliteTable(
   t => [unique().on(t.name, t.userId)],
 );
 
-// 定义插入的location schema
-export const InsertLocationSchema = createInsertSchema(location, {
-  name: field => field.min(1).max(100),
-  description: field => field.max(1000),
-  lat: field => field.min(-90).max(90),
-  long: field => field.min(-180).max(180),
+// 定义了一个名为 InsertLocationSchema 的 Zod Schema
+// 专门用于验证和解析插入（INSERT） location 表数据时的输入对象。
+export const InsertLocation = createInsertSchema(location, {
+  // field 是一个已经包含了基础类型（如 z.string() 或 z.number()）的 Zod 实例，链式调用 .min(), .max() 是在此基础上增加约束。
+  // 针对特定字段覆盖默认的验证规则,
+  name: (field) => {
+    return field.min(1).max(100);
+  },
+  description: (field) => {
+    return field.max(1000);
+  },
+  lat: (field) => {
+    return field.min(-90).max(90);
+  },
+  long: (field) => {
+    return field.min(-180).max(180);
+  },
+
+  // 显式剔除字段,用于从 Schema 中移除指定的键。
 }).omit({
   id: true,
   userId: true,
@@ -57,3 +74,5 @@ export const InsertLocationSchema = createInsertSchema(location, {
   createdAt: true,
   updatedAt: true,
 });
+
+export type InsertLocation = z.infer<typeof InsertLocation>;
