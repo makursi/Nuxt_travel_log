@@ -5,12 +5,12 @@ import { useForm } from "vee-validate";
 // 为表单数据添加类型验证
 // 使用 vee-validate 的 useForm 函数创建表单上下文
 // 传入 InsertLocationSchema 作为验证规则
-import { InsertLocationSchema } from "~/lib/db/schema";
+import { InsertLocation } from "~/lib/db/schema";
 
 const { $csrfFetch } = useNuxtApp();
 
 const { handleSubmit, errors, meta } = useForm({
-  validationSchema: toTypedSchema(InsertLocationSchema),
+  validationSchema: toTypedSchema(InsertLocation),
 });
 
 const submitError = ref("");
