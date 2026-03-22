@@ -35,6 +35,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
     });
   };
 
+  // csrf安全的登出
   async function signOut() {
     const { csrf } = useCsrf();
     const headers = new Headers();

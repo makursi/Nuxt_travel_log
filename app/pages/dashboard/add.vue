@@ -22,28 +22,27 @@ const submitted = ref(false);
 const onSubmit = handleSubmit(async (values) => {
   // 使用$fetch 在前端请求后端服务
   try {
-    submitError.value = "";
     loading.value = true;
     await $csrfFetch("/api/locations", {
       method: "POST",
       body: values,
     });
+    submitError.value = "";
     submitted.value = true;
     navigateTo("/dashboard");
   }
   catch (e) {
     const error = e as FetchError;
-    console.log(error.data?.data);
-    submitError.value = error.message || "an unknow error message";
+    console.log(error);
+    // 返回服务器错误信息
+    submitError.value = error.data?.data || "An unknow error message";
     loading.value = false;
   }
 });
 // 使用onBeforeRouteLeave 路由守卫进行路由离开前的确认
 onBeforeRouteLeave(() => {
   if (!submitted.value && meta.value.dirty) {
-    const confirm = true;
-
-    // window.confirm(
+    // const confirm = window.confirm(
     //   "Are you sure you want to leave? You have unsaved changes.",
     // );
     if (!confirm) {
@@ -85,6 +84,7 @@ onBeforeRouteLeave(() => {
       </svg>
       <span>{{ submitError }}</span>
     </div>
+    <!-- 表单区域 -->
     <form class="flex flex-col gap-2" @submit="onSubmit">
       <!-- 名字 -->
       <AppFormField
