@@ -1,0 +1,12 @@
+export type SidebarItem = {
+  id: string;
+  label: string;
+  icon: string;
+  href?: string;
+};
+
+export const useSidebarStore = defineStore("useSiderbarStore", () => {
+  const sidebarItems = ref<SidebarItem[]>([]);
+  const loading = ref(false);
+  return { sidebarItems, loading };
+});

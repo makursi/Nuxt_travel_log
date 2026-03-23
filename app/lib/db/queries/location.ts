@@ -3,7 +3,7 @@ import { and, eq } from "drizzle-orm";
 
 import { customAlphabet } from "nanoid";
 
-import db from "..";
+import db from "~/lib/db/index";
 import { location } from "../schema";
 
 const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 5);
