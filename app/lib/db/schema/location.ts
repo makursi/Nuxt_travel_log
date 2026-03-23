@@ -2,7 +2,9 @@ import type { z } from "zod";
 import { int, real, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 
 // 用于插入操作的输入数据类型验证规则,createInsertSchema 函数
-import { createInsertSchema } from "drizzle-zod";
+// 从 drizzle-orm@1.0.0-beta.15 版本开始， drizzle-zod 已被弃用，Drizzle ORM 本身提供了第一类的模式生成支持
+// 由于drizzle-zod的弃用, 导致 drizzle-zod 无法再处理schema 中的对数据的约束操作 ,报错: field.min() is not a function
+import { createInsertSchema } from "drizzle-orm/zod";
 
 import { user } from "./auth";
 

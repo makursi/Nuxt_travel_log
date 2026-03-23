@@ -35,7 +35,10 @@ const onSubmit = handleSubmit(async (values) => {
     const error = e as FetchError;
     console.log(error);
     // 返回服务器错误信息
-    submitError.value = error.data?.data || "An unknow error message";
+    submitError.value
+      = error.data?.statusMessage
+        || error.statusMessage
+        || "An unknow error message";
     loading.value = false;
   }
 });

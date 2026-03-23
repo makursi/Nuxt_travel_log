@@ -9,21 +9,11 @@ import {
   insertLocation,
 } from "~/lib/db/queries/location";
 import { InsertLocation } from "~/lib/db/schema";
-
+import defineAuthenticatedEventHandler from "~/utils/define-authenticated-evet-handler";
 //  导入数据库进行数据插入
 
 //  定义提交表单的api
-export default defineEventHandler(async (event) => {
-  // 用户session上下文验证
-  if (!event.context.user) {
-    return sendError(
-      event,
-      createError({
-        statusCode: 401,
-        statusMessage: "Unauthorized",
-      }),
-    );
-  }
+export default defineAuthenticatedEventHandler(async (event) => {
   const result = await readValidatedBody(event, InsertLocation.safeParse);
 
   if (!result.success) {
