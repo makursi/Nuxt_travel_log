@@ -1,10 +1,21 @@
 <script setup lang="ts">
 // ERROR [Better Auth]:  fetch failed, 中国国内大概有90%的概率会在使用 github api 上被阻塞, 因此使用github登录具有局限
+import { useSidebarStore } from "@/stores/sidebar";
+import { useLocationsStore } from "~/stores/locations";
+
+const route = useRoute();
+const locationsStore = useLocationsStore();
 
 const isSideBarOpen = ref(true);
-
+const sidebarStore = useSidebarStore();
 onMounted(() => {
   isSideBarOpen.value = localStorage.getItem("isSideBarOpen") === "true";
+  // 如果不在主页面,应该刷新位置数据
+  // 因为
+  // 非主页面可能已经有了位置数据, 但是需要最新的数据来显示
+  if (route.path !== "/dashboard") {
+    locationsStore.refresh();
+  }
 });
 // 这样做依旧具有缺陷,因为isSideBarOpen的初始值是从localStorage中读取的
 // 客户端加载时会再读取本地存储的值, 然后进行动态加载, 将issidebar值添加到用户的数据库当中, 就可以消除这种影响
@@ -41,6 +52,7 @@ function toggleSideBar() {
           size="42"
         />
       </div>
+
       <div class="flex flex-col">
         <SidebarButton
           :show-label="isSideBarOpen"
@@ -55,6 +67,30 @@ function toggleSideBar() {
           href="/dashboard/add"
         />
 
+        <!-- 骨架屏组件 < -->
+        <div
+          v-if="sidebarStore.loading || sidebarStore.sidebarItems.length"
+          class="divider"
+        />
+        <div v-if="sidebarStore.loading" class="px-4">
+          <div class="skeleton h-4 w-full" />
+        </div>
+        <!-- 处理服务端渲染出现的前端组件加载的问题 -->
+        <div
+          v-if="!sidebarStore.loading && sidebarStore.sidebarItems.length"
+          class="flex flex-col"
+        >
+          <SidebarButton
+            v-for="item in sidebarStore.sidebarItems"
+            :key="item.id"
+            :show-label="isSideBarOpen"
+            :label="item.label"
+            :icon="item.icon"
+            :href="item.href"
+          />
+        </div>
+
+        <!-- 骨架屏组件 > -->
         <div class="divider" />
         <SidebarButton
           :show-label="isSideBarOpen"

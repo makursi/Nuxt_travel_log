@@ -1,5 +1,5 @@
+import { defineRelations } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
-
 import { user } from "./auth";
 import { locationLog } from "./location-log";
 
@@ -20,3 +20,13 @@ export const locationLogImage = sqliteTable("locationLogImage", {
     .$default(() => Date.now())
     .$onUpdate(() => Date.now()),
 });
+
+export const locationLogImageRelations = defineRelations(
+  locationLogImage,
+  ({ one }) => ({
+    locationLog: one(locationLog, {
+      fields: [locationLogImage.locationLogId],
+      references: [locationLog.id],
+    }),
+  }),
+);

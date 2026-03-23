@@ -1,6 +1,11 @@
 <script setup lang="ts">
-const { data, status } = await useFetch("/api/locations", {
-  lazy: true,
+import { useLocationsStore } from "~/stores/locations";
+
+const locationsStore = useLocationsStore();
+const { locations, status } = storeToRefs(locationsStore);
+
+onMounted(() => {
+  locationsStore.refresh();
 });
 </script>
 
@@ -15,9 +20,10 @@ const { data, status } = await useFetch("/api/locations", {
     </div>
     <!-- 渲染数据 -->
 
-    <div v-else-if="data & (data.length > 0)" class="flex flex-wrap gap-2">
+    <!-- 搞骨架屏渲染 -->
+    <div v-else-if="locations" class="flex flex-wrap gap-2">
       <div
-        v-for="location in data"
+        v-for="location in locations"
         :key="location.id"
         class="card card-compact bg-base-400 h-40 w-72"
       >

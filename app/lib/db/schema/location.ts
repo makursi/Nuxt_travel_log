@@ -1,12 +1,14 @@
 import type { z } from "zod";
+import { defineRelations } from "drizzle-orm";
 import { int, real, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
-
 // 用于插入操作的输入数据类型验证规则,createInsertSchema 函数
 // 从 drizzle-orm@1.0.0-beta.15 版本开始， drizzle-zod 已被弃用，Drizzle ORM 本身提供了第一类的模式生成支持
 // 由于drizzle-zod的弃用, 导致 drizzle-zod 无法再处理schema 中的对数据的约束操作 ,报错: field.min() is not a function
 import { createInsertSchema } from "drizzle-orm/zod";
 
 import { user } from "./auth";
+
+import { locationLog } from "./location-log";
 
 export const location = sqliteTable(
   "location",
@@ -49,6 +51,10 @@ export const location = sqliteTable(
   // 业务逻辑需求：在一个用户的旅行日志里，他可能不想重复记录同一个地方两次（避免数据冗余）。
   t => [unique().on(t.name, t.userId)],
 );
+// 定义多表连接
+export const locationRelations = defineRelations(location, ({ many }) => ({
+  locationLogs: many(locationLog),
+}));
 
 // 定义了一个名为 InsertLocationSchema 的 Zod Schema
 // 专门用于验证和解析插入（INSERT） location 表数据时的输入对象。
