@@ -12,7 +12,7 @@ onMounted(() => {
 <template>
   <div class="p-4">
     <h2 class="text-2xl">
-      帝师看过我的龙
+      Create Locations
     </h2>
 
     <div v-if="status === 'pending'">
