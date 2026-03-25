@@ -1,19 +1,19 @@
 <script setup lang="ts">
-// const colorMode = useColorMode();
+const colorMode = useColorMode();
 
-// isDark = computed({
-//   set(value) {
-//     colorMode.preference = value ? "dark" : "light";
-//   },
-//   get() {
-//     return colorMode.preference === "dark";
-//   },
-// });
+const isDark = computed({
+  get() {
+    return colorMode.value === "dark";
+  },
+  set(value) {
+    colorMode.preference = value ? "dark" : "light";
+  },
+});
 </script>
 
 <template>
   <label class="swap swap-rotate">
-    <input type="checkbox">
+    <input v-model="isDark" type="checkbox">
     <!-- sun icon -->
     <Icon
       class="swap-on"

@@ -89,7 +89,6 @@ function toggleSideBar() {
             :href="item.href"
           />
         </div>
-
         <!-- 骨架屏组件 > -->
         <div class="divider" />
         <SidebarButton
@@ -101,10 +100,15 @@ function toggleSideBar() {
       </div>
     </div>
 
-    <div class="flex-1 bg-amber-950-300">
-      <NuxtPage />
+    <div class="flex-1 flex flex-col">
+      <div>
+        <!--  展示的为dashboard/index.vue的内容 -->
+        <NuxtPage />
+        <!-- 展示地图内容 -->
+        <AppMap class="flex-1" />
+      </div>
     </div>
   </div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="css" scoped></style>
