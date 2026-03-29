@@ -102,10 +102,14 @@ function toggleSideBar() {
 
     <div class="flex-1 flex flex-col">
       <div>
+        <div class="flex-1">
+          <div class="flex flex-col size-full">
+            <NuxtPage />
+            <!-- 展示地图内容 -->
+            <AppMap class="flex-1" />
+          </div>
+        </div>
         <!--  展示的为dashboard/index.vue的内容 -->
-        <NuxtPage />
-        <!-- 展示地图内容 -->
-        <AppMap class="flex-1" />
       </div>
     </div>
   </div>

@@ -16,21 +16,24 @@ onMounted(() => {
     </h2>
 
     <div v-if="status === 'pending'">
-      <span class="loading loading-spinner loading-lg" />
+      <span class="loading loading-spinner loading-xl" />
     </div>
     <!-- 渲染数据 -->
 
     <!-- 搞骨架屏渲染 -->
-    <div v-else-if="locations" class="flex flex-wrap gap-2">
+    <div
+      v-else-if="locations && locations.length > 0"
+      class="flex flex-nowrap mt-4 gap-2 overflow-auto"
+    >
       <div
         v-for="location in locations"
         :key="location.id"
-        class="card card-compact bg-base-400 h-40 w-72"
+        class="card card-compact bg-base-400 h-40 w-72 shrink-0"
       >
         <div class="card-body">
-          <h2 class="card-title">
+          <h3 class="text-xl">
             {{ location.name }}
-          </h2>
+          </h3>
           <p>{{ location.description }}</p>
         </div>
       </div>

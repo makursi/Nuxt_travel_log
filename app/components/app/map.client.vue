@@ -7,18 +7,40 @@ const style = computed(() => {
   }
   return "https://tiles.openfreemap.org/styles/liberty";
 });
-const center = [-1.559482, 47.21322];
+
+const mapStore = useMapStore();
 
 // 缩放状态变量
 const zoom = 3;
+
+onMounted(async () => {
+  await mapStore.init();
+});
 </script>
 
 <template>
   <MglMap
     :map-style="style"
-    :center="center"
+    :center="CENTER"
     :zoom="zoom"
   >
     <MglNavigationControl />
+    <MglMarker
+      v-for="point in mapStore.mapPoints"
+      :key="point.id"
+      :lat="point.lat"
+      :lng="point.long"
+      :coordinates="[point.long, point.lat]"
+    >
+      <template #marker>
+        <div class="tooltip tooltip-top" :data-tip="point.label">
+          <Icon
+            name="tabler:map-pin-filled"
+            size="30"
+            class="text-primary"
+          />
+        </div>
+      </template>
+    </MglMarker>
   </MglMap>
 </template>
