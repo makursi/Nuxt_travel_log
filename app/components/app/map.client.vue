@@ -33,7 +33,7 @@ onMounted(async () => {
       :coordinates="[point.long, point.lat]"
     >
       <template #marker>
-        <div class="tooltip tooltip-top" :data-tip="point.label">
+        <div class="tooltip tooltip-top" :data-tip="point.name">
           <Icon
             name="tabler:map-pin-filled"
             size="30"
@@ -41,6 +41,12 @@ onMounted(async () => {
           />
         </div>
       </template>
+      <MglPopup>
+        <h3 class="text-xl">
+          {{ point.name }}
+        </h3>
+        <p>{{ point.description }}</p>
+      </MglPopup>
     </MglMarker>
   </MglMap>
 </template>

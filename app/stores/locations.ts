@@ -25,12 +25,7 @@ export const useLocationsStore = defineStore("useLocations", () => {
         icon: "tabler:tabler:map-pin",
         href: `/dashboard/${location.id}`,
       }));
-      mapStore.mapPoints = data.value.map(location => ({
-        id: `location-${location.id}`,
-        name: location.name,
-        lat: location.lat,
-        lng: location.lng,
-      }));
+      mapStore.mapPoints = data.value;
     }
     else {
       sidebarStore.loading = status.value === "pending";
