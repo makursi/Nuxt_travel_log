@@ -44,8 +44,7 @@ export const useMapStore = defineStore("useMapStore", () => {
               return t;
             },
           });
-        }
-        else if (bounds) {
+        } else if (bounds) {
           map.map?.fitBounds(bounds, {
             padding: 50,
           });
