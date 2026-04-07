@@ -1,3 +1,7 @@
+//  stores/map.ts 是地图全局状态管理库。
+// 它用来统一管理整个项目里地图的所有状态，让地图组件、侧边栏、地点列表、添加页面都能共享同一个地图状态
+// 实现状态同步、视图联动、数据驱动地图渲染。
+
 //  该库只在服务器端进行服务
 import type { LngLatBounds } from "maplibre-gl";
 import type { MapPoint } from "~/lib/type";
@@ -33,6 +37,8 @@ export const useMapStore = defineStore("useMapStore", () => {
       map.map?.fitBounds(bounds, {
         padding: 50,
       });
+      //  pinia底层响应式依赖监听api, 会持续监听状态收集情况， 如果使用watchEffect去进行监听,
+      // 会导致在组件销毁时,监听取消全局状态同步丢失的问题
       effect(() => {
         if (selectedPoint.value) {
           map.map?.flyTo({

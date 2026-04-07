@@ -10,10 +10,10 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "@nuxt/icon",
     "@pinia/nuxt",
-    "@vee-validate/nuxt",
     "nuxt-csurf",
     "nuxt-maplibre",
     "@nuxtjs/color-mode",
+    "@vee-validate",
   ],
   eslint: {
     config: {

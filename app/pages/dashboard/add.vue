@@ -1,16 +1,17 @@
 <script setup lang="ts">
-import { toTypedSchema } from "@vee-validate/zod";
+import type { FetchError } from "ofetch";
+
+// 使用 vee-validate bata 测试版的 useForm 函数创建表单上下文
+// 传入 InsertLocationSchema 作为验证规则
+//  !!!!!
 import { useForm } from "vee-validate";
 
-// 为表单数据添加类型验证
-// 使用 vee-validate 的 useForm 函数创建表单上下文
-// 传入 InsertLocationSchema 作为验证规则
 import { InsertLocation } from "~/lib/db/schema";
 
 const { $csrfFetch } = useNuxtApp();
 
 const { handleSubmit, errors, meta } = useForm({
-  validationSchema: toTypedSchema(InsertLocation),
+  validationSchema: InsertLocation,
 });
 
 const submitError = ref("");
@@ -30,15 +31,14 @@ const onSubmit = handleSubmit(async (values) => {
     submitError.value = "";
     submitted.value = true;
     navigateTo("/dashboard");
-  }
-  catch (e) {
+  } catch (e) {
     const error = e as FetchError;
     console.log(error);
     // 返回服务器错误信息
-    submitError.value
-      = error.data?.statusMessage
-        || error.statusMessage
-        || "An unknow error message";
+    submitError.value =
+      error.data?.statusMessage ||
+      error.statusMessage ||
+      "An unknow error message";
     loading.value = false;
   }
 });
@@ -59,19 +59,11 @@ onBeforeRouteLeave(() => {
 <template>
   <div class="container max-w-md mx-auto">
     <div class="my-4">
-      <h1 class="text-lg">
-        Add Locations
-      </h1>
-      <p class="text-sm">
-        Add a new location to your travel log.
-      </p>
+      <h1 class="text-lg">Add Locations</h1>
+      <p class="text-sm">Add a new location to your travel log.</p>
     </div>
     <!-- 创建alert 提交错误提示 -->
-    <div
-      v-if="submitError"
-      role="alert"
-      class="alert alert-error"
-    >
+    <div v-if="submitError" role="alert" class="alert alert-error">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="h-6 w-6 shrink-0 stroke-current"
@@ -87,7 +79,7 @@ onBeforeRouteLeave(() => {
       </svg>
       <span>{{ submitError }}</span>
     </div>
-    <!-- 表单区域 -->
+    <!-- 详情页表单区域 -->
     <form class="flex flex-col gap-2" @submit="onSubmit">
       <!-- 名字 -->
       <AppFormField
@@ -124,14 +116,11 @@ onBeforeRouteLeave(() => {
 
       <div class="flex justify-end gap-2">
         <button type="submit" class="btn btn-primary">
-          Add Location <Icon name="tabler:circle-plus-filled" size="24" />
+          Add Location
+          <Icon name="tabler:circle-plus-filled" size="24" />
         </button>
 
-        <button
-          type="button"
-          class="btn btn-warning"
-          @click="router.back()"
-        >
+        <button type="button" class="btn btn-warning" @click="router.back()">
           Cancel <Icon name="tabler:arrow-left" size="24" />
         </button>
       </div>

@@ -18,7 +18,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
 
   if (!result.success) {
     const statusMessage = result.error.issues
-      .map(issue => `${issue.path.join("")}: ${issue.message}`)
+      .map((issue) => `${issue.path.join("")}: ${issue.message}`)
       .join(";");
 
     const data = result.error.issues.reduce(
@@ -67,8 +67,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
   //  return created 将新数据对象返回给调用者
   try {
     return insertLocation(result.data, slug, event.context.user.id);
-  }
-  catch (e) {
+  } catch (e) {
     const error = e as DrizzleError;
     const errmsg = String(error.message || error);
 
@@ -84,11 +83,9 @@ export default defineAuthenticatedEventHandler(async (event) => {
         // 简单判断是名字冲突还是其他
         if (conflictDetails.includes("name")) {
           friendlyMessage = "该地点名称已存在，请使用其他名称。";
-        }
-        else if (conflictDetails.includes("slug")) {
+        } else if (conflictDetails.includes("slug")) {
           friendlyMessage = "该地点链接标识 (slug) 已存在。";
-        }
-        else {
+        } else {
           friendlyMessage = "数据重复，无法创建。";
         }
       }

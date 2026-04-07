@@ -1,5 +1,9 @@
+// 1. 权限控制（核心）
+//     只允许已登录用户访问 /dashboard 相关页面
+//     未登录用户自动拦截，无法进入任何业务页面
+//     保护私密数据，防止未授权访问
+// 中间件自动运行
 import { auth } from "~/lib/auth";
-
 // defineEventHandler 是 H3/Nitro 的函数，用于定义一个处理 HTTP 请求的处理器
 export default defineEventHandler(async (event) => {
   // event 是H3 框架中的核心对象，代表当前的 HTTP 请求事件。

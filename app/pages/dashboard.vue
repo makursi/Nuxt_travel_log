@@ -26,6 +26,7 @@ function toggleSideBar() {
 </script>
 
 <template>
+  <!-- 左侧侧边栏 flex从左到右 -->
   <div class="flex-1 flex">
     <!-- 绑定特殊样式, 根据isSideBarOpen的值切换侧边栏的展开状态 -->
     <div
@@ -41,16 +42,8 @@ function toggleSideBar() {
         }"
         @click="toggleSideBar"
       >
-        <Icon
-          v-if="isSideBarOpen"
-          name="tabler:chevron-left"
-          size="42"
-        />
-        <Icon
-          v-else
-          name="tabler:chevron-right"
-          size="42"
-        />
+        <Icon v-if="isSideBarOpen" name="tabler:chevron-left" size="42" />
+        <Icon v-else name="tabler:chevron-right" size="42" />
       </div>
 
       <div class="flex flex-col">
@@ -100,13 +93,18 @@ function toggleSideBar() {
       </div>
     </div>
 
+    <!--右侧---展示内容区域 -->
     <div class="flex-1 flex flex-col">
       <div>
         <div class="flex-1">
           <div class="flex flex-col size-full">
+            <!-- 两个页面,一个是根页面展示地图内容 -->
+            <!-- 另一个是显示地图内容 -->
             <NuxtPage />
-            <!-- 展示地图内容 -->
+            <!-- 这个NuxtPage指的是 /dashboard/index.vue -->
+
             <AppMap class="flex-1" />
+            <!-- 展示地图内容 -->
           </div>
         </div>
         <!--  展示的为dashboard/index.vue的内容 -->
