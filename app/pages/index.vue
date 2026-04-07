@@ -6,19 +6,13 @@ const authStore = useAuthStore();
   <div class="hero bg-base-300 container mx-auto mt-4">
     <div class="hero-content text-center min-h-96">
       <div class="max-w-md">
-        <h1 class="text-5xl font-bold">
-          Travel Log
-        </h1>
+        <h1 class="text-5xl font-bold">Travel Log</h1>
         <p class="py-6">
           Use this travel log app to keep track of your travel itinerary.
         </p>
         <AuthButton v-if="!authStore.user" />
 
-        <NuxtLink
-          v-else
-          to="/dashboard"
-          class="btn btn-primary"
-        >
+        <NuxtLink v-else to="/dashboard" class="btn btn-primary">
           Start Logging
         </NuxtLink>
       </div>

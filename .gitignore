@@ -29,3 +29,8 @@ logs
 *.db
 *-wal
 *-shm
+
+# 忽略数据库文件
+travel_log_database
+*.db
+*.sqlite

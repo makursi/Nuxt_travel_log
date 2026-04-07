@@ -16,18 +16,21 @@ export const useLocationsStore = defineStore("useLocations", () => {
   const sidebarStore = useSidebarStore();
   const mapStore = useMapStore();
 
+  // 因为 effect 是 Vue 3 响应式系统的底层 API，生命周期与 Pinia store 完全一致，会永久持续监听，不会像 watchEffect 那样在组件卸载时自动停止。
+  // 我的项目里需要监听地点列表的全局变化，实现前端状态与后端数据库的自动同步
+  // 所以使用 effect 更稳定、更适合全局状态管理场景。
+
   effect(() => {
     if (data.value) {
       sidebarStore.loading = false;
-      sidebarStore.sidebarItems = data.value.map(location => ({
+      sidebarStore.sidebarItems = data.value.map((location) => ({
         id: `location-${location.id}`,
         label: location.name,
         icon: "tabler:tabler:map-pin",
         href: `/dashboard/${location.id}`,
       }));
       mapStore.mapPoints = data.value;
-    }
-    else {
+    } else {
       sidebarStore.loading = status.value === "pending";
     }
   });

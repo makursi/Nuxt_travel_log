@@ -11,9 +11,7 @@ onMounted(() => {
 
 <template>
   <div class="p-4">
-    <h2 class="text-2xl">
-      Create Locations
-    </h2>
+    <h2 class="text-2xl">Create Locations</h2>
 
     <div v-if="status === 'pending'">
       <span class="loading loading-spinner loading-xl" />
@@ -27,6 +25,7 @@ onMounted(() => {
       @mouseenter="mapStore.selectPoint = location"
       @mouseleave="mapStore.selectPoint = null"
     >
+      <!-- 用户上传的卡片的内容展示区域 -->
       <div
         v-for="location in locations"
         :key="location.id"
@@ -42,6 +41,7 @@ onMounted(() => {
       </div>
     </div>
 
+    <!-- 条件渲染--- 如果用户没有添加卡片,我们就展示添加卡片选项 -->
     <div v-else class="flex flex-col gap-2 mt-4">
       <p>Add a location to get started</p>
 

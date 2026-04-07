@@ -1,8 +1,10 @@
 import { createAuthClient } from "better-auth/vue";
 import { defineStore } from "pinia";
-
-const authClient = createAuthClient();
 //   定义和auth 有关的全局状态管理
+//   根据better auth 官方配置
+//
+const authClient = createAuthClient();
+
 export const useAuthStore = defineStore("useAuthStore", () => {
   const session = ref<Awaited<ReturnType<typeof authClient.useSession>> | null>(
     null,
@@ -20,6 +22,8 @@ export const useAuthStore = defineStore("useAuthStore", () => {
       session.value?.data?.user,
   );
   const loading = computed(() => session.value?.isPending);
+
+  //使用nuxt-csrf去发送 csrf token,然后发送token
   const signIn = async () => {
     const { csrf } = useCsrf();
     const headers = new Headers();
@@ -45,6 +49,7 @@ export const useAuthStore = defineStore("useAuthStore", () => {
         headers,
       },
     });
+
     // 登出用户后返回home page
     navigateTo("/");
   }

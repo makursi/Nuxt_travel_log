@@ -4,7 +4,7 @@ import { int, real, sqliteTable, text, unique } from "drizzle-orm/sqlite-core";
 // 用于插入操作的输入数据类型验证规则,createInsertSchema 函数
 // 从 drizzle-orm@1.0.0-beta.15 版本开始， drizzle-zod 已被弃用，Drizzle ORM 本身提供了第一类的模式生成支持
 // 由于drizzle-zod的弃用, 导致 drizzle-zod 无法再处理schema 中的对数据的约束操作 ,报错: field.min() is not a function
-import { createInsertSchema } from "drizzle-orm/zod";
+import { createInsertSchema } from "drizzle-zod";
 
 import { user } from "./auth";
 
@@ -49,7 +49,7 @@ export const location = sqliteTable(
   // 普通的 .unique() 是单列的（比如 slug 不能重复）。
   // 而这里的逻辑是：“对于同一个用户 (userId)，地点名称 (name) 不能重复。”
   // 业务逻辑需求：在一个用户的旅行日志里，他可能不想重复记录同一个地方两次（避免数据冗余）。
-  t => [unique().on(t.name, t.userId)],
+  (t) => [unique().on(t.name, t.userId)],
 );
 // 定义多表连接
 // export const locationRelations = defineRelations(locationlog, ({ many }) => ({

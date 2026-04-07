@@ -1,12 +1,18 @@
-# Nuxt Travel Log
 
+# ⚠️提醒: 
+# 项目使用使用turso Cloud 时使用Mac/Linux/WSL安装Turso cli 工具
+# 2.由于Nuxt社区依赖Vee-Validate 与 better auth 具有依赖冲突, 且目前Vee-Validate v.4.15 不支持 Zod 4 版本, 故按照Vee-Validate 官方版本迁移指南进行迁移, 个人测试 beta 现阶段可以搭配Zod , yup , vailbot 最新版使用.
+
+
+## Nuxt Travel Log
 一个基于 Nuxt 4 构建的现代化旅行日志应用，用于记录和管理您的旅行足迹。
 
 ## 项目简介
 
 这是一个功能丰富的旅行日志应用，支持 GitHub OAuth 登录、交互式地图、旅行地点管理、深色/浅色主题切换等功能。项目采用了现代前端技术栈，包括 Nuxt 4、Pinia 状态管理、Drizzle ORM、SQLite 数据库、Tailwind CSS 和 DaisyUI。
 
-## 技术栈
+
+
 
 ### 核心框架
 
@@ -23,7 +29,7 @@
 ### 状态管理与表单
 
 - **Pinia 3.0.4** - Vue 官方推荐的状态管理库
-- **Vee-Validate 4.15.1** - 表单验证库
+- **Vee-Validate 5 beta** - 表单验证库
 - **Zod 4.3.6** - TypeScript 优先的模式声明和验证库
 
 ### 样式与 UI
@@ -257,10 +263,4 @@ npm run lint:fix
 | `npm run db:migrate`  | 执行数据库迁移       |
 | `npm run db:studio`   | 打开 Drizzle Studio  |
 
-## License
-
-Private
-
 ---
-
-**旅行愉快！🚀**

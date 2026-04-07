@@ -1,4 +1,4 @@
-import { drizzle } from "drizzle-orm/tursodatabase/database";
+import { drizzle } from "drizzle-orm/libsql";
 import env from "../env";
 import * as schema from "./schema";
 
@@ -10,7 +10,9 @@ import "dotenv/config";
 
 const db = drizzle({
   connection: {
-    path: env.DB_FILE_NAME,
+    url: env.TURSO_DATABASE_URL,
+    authToken:
+      env.NODE_ENV === "development" ? undefined : env.TURSO_AUTH_TOKEN,
   },
   schema,
 });
