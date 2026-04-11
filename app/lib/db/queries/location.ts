@@ -22,7 +22,7 @@ const nanoid = customAlphabet("1234567890abcdefghijklmnopqrstuvwxyz", 5);
 // and(condition1, condition2)
 
 // 定义该函数的作用:幂等性检查 (Idempotency Check) / 防重,在执行 INSERT 之前，先调用此函数。
-console.log("Available tables in db.query:", Object.keys(db.query));
+// console.log("Available tables in db.query:", Object.keys(db.query));
 export async function findLocation(slug: string, userId: number) {
   return db.query.location.findFirst({
     where: and(eq(location.slug, slug), eq(location.userId, userId)),

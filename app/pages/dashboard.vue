@@ -11,7 +11,6 @@ const sidebarStore = useSidebarStore();
 onMounted(() => {
   isSideBarOpen.value = localStorage.getItem("isSideBarOpen") === "true";
   // 如果不在主页面,应该刷新位置数据
-  // 因为
   // 非主页面可能已经有了位置数据, 但是需要最新的数据来显示
   if (route.path !== "/dashboard") {
     locationsStore.refresh();
@@ -61,6 +60,8 @@ function toggleSideBar() {
         />
 
         <!-- 骨架屏组件 < -->
+        <!-- 在数据加载时，通过 Pinia 的 loading 状态控制骨架屏显示 -->
+        <!-- 数据加载完成后隐藏，展示真实内容， -->
         <div
           v-if="sidebarStore.loading || sidebarStore.sidebarItems.length"
           class="divider"

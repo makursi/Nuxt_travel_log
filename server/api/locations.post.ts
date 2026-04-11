@@ -9,13 +9,16 @@ import {
   insertLocation,
 } from "~/lib/db/queries/location";
 import { InsertLocation } from "~/lib/db/schema";
+
+// 必须登录才能访问
 import defineAuthenticatedEventHandler from "~/utils/define-authenticated-evet-handler";
-//  导入数据库进行数据插入
 
 //  定义提交表单的api
 export default defineAuthenticatedEventHandler(async (event) => {
+  // 校验前端提交的数据,保证类型安全,前端直接展示错误
   const result = await readValidatedBody(event, InsertLocation.safeParse);
 
+  // 校验失败处理
   if (!result.success) {
     const statusMessage = result.error.issues
       .map((issue) => `${issue.path.join("")}: ${issue.message}`)
@@ -41,6 +44,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
   //  处理slug的生成, 使用slug库和 nanoid 生成对浏览器 url 友好的地址, 因为用户可能只分享同一个地点一次, 所以要行slug + id = idSlug的生成
   // 查询数据库, 检查slug 是否存在,如果存在就添加上nanoid 如果不存在 就单插入一个位置
 
+  // 判断地点名称是否重复,同一个用户不能创建同名地点
   const existinglocation = await findLocationByName(
     result.data,
     event.context.user.id,
@@ -66,6 +70,7 @@ export default defineAuthenticatedEventHandler(async (event) => {
   //  const [created] = await db 是数组结构, 取数组的第一个元素
   //  return created 将新数据对象返回给调用者
   try {
+    // 调用封装好的query函数,将数据插入到数据库当中
     return insertLocation(result.data, slug, event.context.user.id);
   } catch (e) {
     const error = e as DrizzleError;

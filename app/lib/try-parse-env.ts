@@ -10,8 +10,7 @@ export default function tryParseEnv<T extends ZodRawShape>(
 ) {
   try {
     EnvSchema.parse(buildEnv);
-  }
-  catch (error) {
+  } catch (error) {
     if (error instanceof ZodError) {
       let message = "Missing required values in .env:\n";
       error.issues.forEach((issue) => {
@@ -20,8 +19,7 @@ export default function tryParseEnv<T extends ZodRawShape>(
       const e = new Error(message);
       e.stack = "";
       throw e;
-    }
-    else {
+    } else {
       console.error(error);
     }
   }
